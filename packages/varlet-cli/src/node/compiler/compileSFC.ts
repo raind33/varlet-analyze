@@ -51,8 +51,11 @@ export async function compileSFC(sfc: string) {
     return
   }
   // scoped
+  // 检查是否存在scoped作用域的样式块
   const hasScope = styles.some((style) => style.scoped)
+  // 将单文件的内容进行hash生成id
   const id = hash(sources)
+  // 生成样式的scopeId
   const scopeId = hasScope ? `data-v-${id}` : ''
   if (script) {
     // template

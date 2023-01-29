@@ -91,7 +91,7 @@ export async function compileModule() {
     })
   )
 
-  const publicDirs = await getPublicDirs()
+  const publicDirs = await getPublicDirs() // 遍历varlet-ui/src/目录，找出所有存在['index.vue', 'index.tsx', 'index.ts', 'index.jsx', 'index.js']这些文件之一的目录
   await compileESEntry(dest, publicDirs)
   clearLessFiles(dest)
   generateReference(dest)
