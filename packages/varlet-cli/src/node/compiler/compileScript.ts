@@ -110,6 +110,9 @@ export async function compileScript(script: string, file: string) {
   })) as BabelFileResult
 
   if (code) {
+    // e.g. './a.vue' -> './a.mjs'
+    // e.g. ../button/props -> ../button/props.mjs
+    // e.g. -> ../button/index.mjs
     code = resolveDependence(file, code)
     code = extractStyleDependencies(file, code, IMPORT_CSS_RE)
     code = extractStyleDependencies(file, code, IMPORT_LESS_RE)

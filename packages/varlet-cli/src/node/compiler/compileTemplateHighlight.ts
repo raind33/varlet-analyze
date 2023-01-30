@@ -138,9 +138,10 @@ export function compileMD(
   }
 
   const md = readFileSync(path, 'utf-8')
+  // path /Users/wuyuliang/Desktop/learn/varlet/packages/varlet-ui/src/action-sheet/docs/zh-CN.md
+  const componentName = path.match(HL_COMPONENT_NAME_RE)![2] // action-sheet
 
-  const componentName = path.match(HL_COMPONENT_NAME_RE)![2]
-
+  // 解析md模板中的table
   const attributesTable = parseTable(compileTable(md, HL_TITLE_ATTRIBUTES_RE))
   const eventsTable = parseTable(compileTable(md, HL_TITLE_EVENTS_RE))
   const slotsTable = parseTable(compileTable(md, HL_TITLE_SLOTS_RE))
@@ -150,8 +151,9 @@ export function compileMD(
     eventsTable,
     slotsTable,
   }
-
+  // table中属性格式化，以及根据配置中的namespace与componentName生成最终的tags
   compileWebTypes(table, webTypes, componentName, varletConfig)
+  // 格式化props
   compileTags(table, tags, componentName, varletConfig)
   compileAttributes(table, attributes, componentName, varletConfig)
 }
@@ -176,7 +178,7 @@ export function compileDir(
 export async function compileTemplateHighlight() {
   await ensureDir(HL_DIR)
 
-  const varletConfig = await getVarletConfig()
+  const varletConfig = await getVarletConfig() // 自定义配置与默认配置合并
   const tags: Record<string, any> = {}
   const attributes: Record<string, any> = {}
   const webTypes: Record<string, any> = {

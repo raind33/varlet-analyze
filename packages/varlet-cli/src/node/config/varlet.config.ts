@@ -58,9 +58,16 @@ export function mergeStrategy(value: any, srcValue: any, key: string) {
 
 export async function getVarletConfig(emit = false): Promise<Required<VarletConfig>> {
   const defaultConfig = (await import('./varlet.default.config.js')).default
-  const config: any = pathExistsSync(VARLET_CONFIG)
-    ? (await import(`${pathToFileURL(VARLET_CONFIG).href}?_t=${statSync(VARLET_CONFIG).mtimeMs}`)).default
-    : {}
+  // const config: any = pathExistsSync(VARLET_CONFIG) // varlet-ui/varlet.config.mjs
+  //   ? (await import(`${pathToFileURL(VARLET_CONFIG).href}?_t=${statSync(VARLET_CONFIG).mtimeMs}`)).default
+  //   : {}
+
+  let config: any = {}
+  if (pathExistsSync(VARLET_CONFIG)) {
+    // file:///Users/wuyuliang/Desktop/learn/varlet/packages/varlet-ui/varlet.config.mjs?_t=1674958803490.869
+    const url = `${pathToFileURL(VARLET_CONFIG).href}?_t=${statSync(VARLET_CONFIG).mtimeMs}`
+    config = (await import(url)).default
+  }
   const mergedConfig = mergeWith(defaultConfig, config, mergeStrategy)
 
   if (emit) {
